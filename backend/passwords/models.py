@@ -20,6 +20,6 @@ class Password(models.Model):
         ordering = ('resource', )
         verbose_name = 'Пароль'
         verbose_name_plural = 'Пароли'
-    
+
     def __str__(self):
         return self.resource

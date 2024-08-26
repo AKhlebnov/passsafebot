@@ -141,3 +141,6 @@ dmypy.json
 static/
 media/
 pdf/
+
+# Other files and path
+telega_token.docx
