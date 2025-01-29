@@ -11,11 +11,11 @@
                       <a class="nav-link" href="/profile/">Профиль</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="/logout/">Выйти</a>
+                      <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
                   </li>
               {% else %}
                   <li class="nav-item">
-                      <a class="nav-link" href="/login/">Войти</a>
+                      <a class="nav-link" href="{% url 'login' %}">Войти</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="/register/">Зарегистрироваться</a>

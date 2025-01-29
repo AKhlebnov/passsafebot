@@ -10,7 +10,7 @@
             <a class="btn btn-primary" href="/passwords/">Перейти к ресурсам</a>
         {% else %}
             <a class="btn btn-success" href="/register/">Зарегистрироваться</a>
-            <a class="btn btn-secondary" href="/login/">Войти</a>
+            <a class="btn btn-secondary" href="{% url 'login' %}">Войти</a>
         {% endif %}
     </div>
 {% endblock %}

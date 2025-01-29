@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'passwords.apps.PasswordsConfig',
     'rest_framework',
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -111,3 +112,5 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'index'
