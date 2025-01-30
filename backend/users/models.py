@@ -1,8 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from backend.constants import MAX_EMAIL_LENGTH, MAX_NAME_LENGTH
+
+
+def validate_image_size(image):
+    if image.size > 2 * 1024 * 1024:  # 2MB
+        raise ValidationError("Максимальный размер файла — 2 МБ")
 
 
 class User(AbstractUser):
@@ -39,7 +45,9 @@ class User(AbstractUser):
         verbose_name='Аватар',
         upload_to='avatars/',
         null=True,
-        blank=True
+        blank=True,
+        default='avatars/default.png',
+        validators=[validate_image_size],
     )
 
     class Meta:
