@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="220x220" href="{% static 'img/fav/favicon_220x220.png' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>{% block title %}PassSafeBot{% endblock %}</title>
     {% bootstrap_css %}
 </head>
@@ -19,5 +20,6 @@
     {% include 'includes/footer.html' %}
     
     {% bootstrap_javascript %}
+    {% block scripts %}{% endblock %}
 </body>
 </html>
