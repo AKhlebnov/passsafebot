@@ -1,0 +1,57 @@
+<div class="col d-flex justify-content-center">
+  <div class="card shadow-sm mb-4" style="width: 40rem;">
+    <div class="card-header bg-light">
+      <h5 class="card-title mb-0">
+        {% if password.resource_icon %}
+          <img src="{{ password.resource_icon.url }}" alt="Иконка" class="me-2" style="height: 24px;">
+        {% endif %}
+        {{ password.resource }}
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="card-text">
+            <strong>Логин:</strong><br>
+            <code>{{ password.login }}</code>
+          </p>
+          <p class="card-text">
+            <strong>Пароль:</strong><br>
+            <code class="password-field" data-password="{{ password.password }}">••••••••</code>
+            <button class="btn btn-sm btn-outline-secondary show-password" type="button">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary copy-password" type="button">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p class="card-text">
+            <strong>Категория:</strong><br>
+            {{ password.category.name|default:"Без категории" }}
+          </p>
+          <p class="card-text">
+            <strong>Последнее обновление:</strong><br>
+            {{ password.updated_at|date:"d.m.Y H:i" }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-light">
+      <div class="d-flex justify-content-between">
+        <small class="text-muted">
+          Создано: {{ password.created_at|date:"d.m.Y H:i" }}
+        </small>
+        <div>
+          <a href="#" class="btn btn-sm btn-outline-primary me-2">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <a href="#" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
