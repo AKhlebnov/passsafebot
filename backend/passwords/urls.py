@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import IndexView, PasswordListView, PasswordCreateView
+from .views import IndexView, PasswordListView, PasswordCreateView, PasswordDetailView, PasswordUpdateView, PasswordDeleteView
 
 app_name = 'passwords'
 
@@ -10,5 +10,17 @@ urlpatterns = [
     path(
         'passwords/create/',
         PasswordCreateView.as_view(), name='password_create'
+    ),
+    path(
+        'passwords/<int:password_id>/',
+        PasswordDetailView.as_view(), name='password_detail'
+    ),
+    path(
+        'passwords/<int:password_id>/edit/',
+        PasswordUpdateView.as_view(), name='password_edit'
+    ),
+    path(
+        'passwords/<int:password_id>/delete/',
+        PasswordDeleteView.as_view(), name='password_delete'
     ),
 ]
