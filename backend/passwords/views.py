@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseNotFound
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 
 from .forms import PasswordForm
 from .models import Password
@@ -41,3 +43,55 @@ class PasswordCreateView(LoginRequiredMixin, CreateView):
         # Привязываем ресурс к текущему пользователю
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class PasswordDetailView(LoginRequiredMixin, DetailView):
+    model = Password
+    pk_url_kwarg = 'password_id'
+    template_name = 'passwords/password_detail.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        password = self.get_object()
+
+        if request.user == password.user:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseNotFound("Страница не найдена")
+
+
+class PasswordUpdateView(LoginRequiredMixin, UpdateView):
+    model = Password
+    form_class = PasswordForm
+    template_name = 'passwords/password_form.html'
+    pk_url_kwarg = 'password_id'
+
+    def dispatch(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.user != request.user:
+            return HttpResponseNotFound("Страница не найдена")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        # Возвращаем URL для детальной страницы ресурса
+        return reverse_lazy('passwords:password_detail', kwargs={'password_id': self.object.pk})
+
+
+class PasswordDeleteView(LoginRequiredMixin, DeleteView):
+    model = Password
+    template_name = 'passwords/password_delete.html'
+    pk_url_kwarg = 'password_id'
+    success_url = reverse_lazy('passwords:password_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.user != request.user:
+            return HttpResponseNotFound("Страница не найдена")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        instance = self.object
+        context['password'] = instance
+        return context
