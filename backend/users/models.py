@@ -7,8 +7,8 @@ from backend.constants import MAX_EMAIL_LENGTH, MAX_NAME_LENGTH
 
 
 def validate_image_size(image):
-    if image.size > 2 * 1024 * 1024:  # 2MB
-        raise ValidationError("Максимальный размер файла — 2 МБ")
+    if image.size > 4 * 1024 * 1024:  # 4MB
+        raise ValidationError("Максимальный размер файла — 4 МБ")
 
 
 class User(AbstractUser):

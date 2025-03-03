@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Профиль {{ profile.username }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Профиль пользователя</h3>
+        </div>
+        
+        <div class="card-body">
+          <div class="row">
+            <!-- Аватар и действия -->
+            <div class="col-md-4 text-center">
+              <img src="{{ profile.avatar.url }}" 
+                   class="img-thumbnail rounded-circle mb-3" 
+                   alt="Аватар {{ profile.username }}"
+                   style="width: 150px; height: 150px; object-fit: cover;">
+              
+              {% if user == profile %}
+              <div class="d-grid gap-2">
+                <a href="{% url 'passwords:edit_profile' profile.username %}" 
+                   class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-pencil-square"></i> Редактировать
+                </a>
+                <a href="{% url 'password_change' %}" 
+                   class="btn btn-outline-secondary btn-sm">
+                  <i class="bi bi-shield-lock"></i> Сменить пароль
+                </a>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Информация о пользователе -->
+            <div class="col-md-8">
+              <h2 class="mb-4">
+                {{ profile.get_full_name|default:"Имя не указано" }}
+                <small class="text-muted">@{{ profile.username }}</small>
+              </h2>
+
+              <div class="row">
+                <div class="col-12">
+                  <div class="list-group">
+                    <div class="list-group-item">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Контактная информация</h5>
+                      </div>
+                      <p class="mb-1">
+                        <i class="bi bi-envelope me-2"></i>
+                        {{ profile.email }}
+                      </p>
+                    </div>
+
+                    <div class="list-group-item">
+                      <h5 class="mb-3">Статистика</h5>
+                      <div class="d-flex justify-content-between">
+                        <div>
+                          <i class="bi bi-calendar-check me-2"></i>
+                          Регистрация:<br>
+                          <small>{{ profile.date_joined|date:"d E Y" }}</small>
+                        </div>
+                        <div>
+                          <i class="bi bi-person-badge me-2"></i>
+                          Статус:<br>
+                          <small>
+                            {% if profile.is_staff %}
+                              <span class="badge bg-danger">Администратор</span>
+                            {% else %}
+                              <span class="badge bg-success">Пользователь</span>
+                            {% endif %}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

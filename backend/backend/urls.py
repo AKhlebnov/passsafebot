@@ -6,6 +6,8 @@ from django.views.generic.edit import CreateView
 
 from users.forms import CustomUserCreationForm
 
+handler404 = 'core.views.page_not_found'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('passwords.urls')),

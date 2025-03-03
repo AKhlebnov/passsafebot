@@ -6,7 +6,10 @@ SECRET_KEY = 'django-insecure-ieey&v3b)=u05x=-p(qqy4$=4z&bad&fe@j$vnvpo7*ej1c8+v
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -20,6 +23,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'api.apps.ApiConfig',
     'passwords.apps.PasswordsConfig',
+    'core.apps.CoreConfig',
     'rest_framework',
     'django_bootstrap5',
 ]
