@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django_cryptography.fields import encrypt
 
 ACTION_CHOICES = [
     ('create', 'Создание'),
@@ -76,7 +77,7 @@ class Password(models.Model):
         verbose_name='Иконка ресурса'
     )
     login = models.CharField('Логин на ресурсе', max_length=255)
-    password = models.CharField('Пароль', max_length=255)
+    password = encrypt(models.CharField('Пароль', max_length=255))
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     updated_at = models.DateTimeField('Обновлен', auto_now=True)
     category = models.ForeignKey(
