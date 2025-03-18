@@ -11,8 +11,8 @@ handler404 = 'core.views.page_not_found'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    path('auth/', include('users.urls')),
     path('passwords/', include('passwords.urls')),
+    path('users/', include('users.urls')),
     path('', IndexView.as_view(), name='index'),
 ]
 
