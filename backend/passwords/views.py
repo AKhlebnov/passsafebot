@@ -69,7 +69,10 @@ class PasswordUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         # Возвращаем URL для детальной страницы ресурса
-        return reverse_lazy('passwords:password_detail', kwargs={'password_id': self.object.pk})
+        return reverse_lazy(
+            'passwords:password_detail',
+            kwargs={'password_id': self.object.pk}
+        )
 
 
 class PasswordDeleteView(LoginRequiredMixin, DeleteView):
