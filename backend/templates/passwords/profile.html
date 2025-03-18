@@ -20,11 +20,11 @@
               
               {% if user == profile %}
               <div class="d-grid gap-2">
-                <a href="{% url 'passwords:edit_profile' profile.username %}" 
+                <a href="{% url 'users:edit_profile' profile.username %}" 
                    class="btn btn-outline-primary btn-sm">
                   <i class="bi bi-pencil-square"></i> Редактировать
                 </a>
-                <a href="{% url 'password_change' %}" 
+                <a href="{% url 'users:password_change' %}" 
                    class="btn btn-outline-secondary btn-sm">
                   <i class="bi bi-shield-lock"></i> Сменить пароль
                 </a>
