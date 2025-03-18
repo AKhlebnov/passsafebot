@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import (
     TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 )
 
+from core.mixins import BasePasswordMixin, OwnerRequiredMixin
 from .forms import PasswordForm
 from .models import Password
 
@@ -13,10 +13,17 @@ User = get_user_model()
 
 
 class IndexView(TemplateView):
+    """
+    Главная страница приложения.
+    """
     template_name = "passwords/index.html"
 
 
 class PasswordListView(LoginRequiredMixin, ListView):
+    """
+    Список всех паролей.
+    Выводит список всех паролей текущего пользователя.
+    """
     model = Password
     template_name = 'passwords/password_list.html'
     context_object_name = 'passwords'
@@ -29,6 +36,12 @@ class PasswordListView(LoginRequiredMixin, ListView):
 
 
 class PasswordCreateView(LoginRequiredMixin, CreateView):
+    """
+    Создание нового пароля.
+
+    Доступно только авторизованным пользователям.
+    После успешного создания перенаправляет на список паролей.
+    """
     model = Password
     form_class = PasswordForm
     template_name = 'passwords/password_form.html'
@@ -40,56 +53,40 @@ class PasswordCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PasswordDetailView(LoginRequiredMixin, DetailView):
-    model = Password
-    pk_url_kwarg = 'password_id'
+class PasswordDetailView(
+    LoginRequiredMixin, OwnerRequiredMixin,
+    BasePasswordMixin, DetailView
+):
+    """
+    Детальная информация о пароле.
+    Доступна только владельцу пароля.
+    """
     template_name = 'passwords/password_detail.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        password = self.get_object()
 
-        if request.user == password.user:
-            return super().dispatch(request, *args, **kwargs)
-        else:
-            raise Http404()
-
-
-class PasswordUpdateView(LoginRequiredMixin, UpdateView):
-    model = Password
+class PasswordUpdateView(
+    LoginRequiredMixin, OwnerRequiredMixin,
+    BasePasswordMixin, UpdateView
+):
+    """
+    Редактирование пароля.
+    Доступна только владельцу пароля.
+    """
     form_class = PasswordForm
     template_name = 'passwords/password_form.html'
-    pk_url_kwarg = 'password_id'
-
-    def dispatch(self, request, *args, **kwargs):
-        instance = self.get_object()
-
-        if instance.user != request.user:
-            raise Http404()
-        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         # Возвращаем URL для детальной страницы ресурса
-        return reverse_lazy(
-            'passwords:password_detail',
-            kwargs={'password_id': self.object.pk}
-        )
+        return self.object.get_absolute_url()
 
 
-class PasswordDeleteView(LoginRequiredMixin, DeleteView):
-    model = Password
+class PasswordDeleteView(
+    LoginRequiredMixin, OwnerRequiredMixin,
+    BasePasswordMixin, DeleteView
+):
+    """
+    Удаление пароля.
+    Доступна только владельцу пароля.
+    """
     template_name = 'passwords/password_delete.html'
-    pk_url_kwarg = 'password_id'
     success_url = reverse_lazy('passwords:password_list')
-
-    def dispatch(self, request, *args, **kwargs):
-        instance = self.get_object()
-
-        if instance.user != request.user:
-            raise Http404()
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        instance = self.object
-        context['password'] = instance
-        return context

@@ -4,11 +4,11 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from backend.constants import MAX_EMAIL_LENGTH, MAX_NAME_LENGTH
+from core.constants import MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_AVATAR_SIZE
 
 
 def validate_image_size(image):
-    if image.size > 4 * 1024 * 1024:  # 4MB
+    if image.size > MAX_AVATAR_SIZE:
         raise ValidationError("Максимальный размер файла — 4 МБ")
 
 
