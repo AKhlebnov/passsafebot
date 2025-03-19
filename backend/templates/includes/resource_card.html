@@ -44,11 +44,9 @@
           Создано: {{ password.created_at|date:"d.m.Y H:i" }}
         </small>
         <div>
-          <a href="#" class="btn btn-sm btn-outline-primary me-2">
-            <i class="bi bi-pencil"></i>
-          </a>
-          <a href="#" class="btn btn-sm btn-outline-danger">
-            <i class="bi bi-trash"></i>
+          <!-- Ссылка на детальную страницу ресурса -->
+          <a href="{% url 'passwords:password_detail' password_id=password.id %}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-eye"></i> Детали
           </a>
         </div>
       </div>

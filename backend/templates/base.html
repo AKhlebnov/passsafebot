@@ -10,10 +10,10 @@
     <title>{% block title %}PassSafeBot{% endblock %}</title>
     {% bootstrap_css %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     {% include 'includes/header.html' %}
     
-    <main class="container my-4">
+    <main class="container my-4 flex-grow-1">
         {% block content %}{% endblock %}
     </main>
     

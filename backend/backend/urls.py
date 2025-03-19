@@ -1,25 +1,19 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include, reverse_lazy
-from django.views.generic.edit import CreateView
+from django.urls import path, include
 
-from users.forms import CustomUserCreationForm
+from passwords.views import IndexView
+
+
+handler404 = 'core.views.page_not_found'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('passwords.urls')),
     path('api/', include('api.urls')),
-    path('auth/', include('django.contrib.auth.urls')),
-    path(
-        'auth/registration/',
-        CreateView.as_view(
-            template_name='registration/registration_form.html',
-            form_class=CustomUserCreationForm,
-            success_url=reverse_lazy('passwords:index'),
-        ),
-        name='registration',
-    ),
+    path('passwords/', include('passwords.urls')),
+    path('users/', include('users.urls')),
+    path('', IndexView.as_view(), name='index'),
 ]
 
 if settings.DEBUG:

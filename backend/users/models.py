@@ -1,14 +1,15 @@
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from backend.constants import MAX_EMAIL_LENGTH, MAX_NAME_LENGTH
+from core.constants import MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_AVATAR_SIZE
 
 
 def validate_image_size(image):
-    if image.size > 2 * 1024 * 1024:  # 2MB
-        raise ValidationError("Максимальный размер файла — 2 МБ")
+    if image.size > MAX_AVATAR_SIZE:
+        raise ValidationError("Максимальный размер файла — 4 МБ")
 
 
 class User(AbstractUser):
@@ -59,3 +60,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def get_absolute_url(self):
+        return reverse('users:profile', kwargs={'username': self.username})

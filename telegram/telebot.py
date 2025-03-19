@@ -5,11 +5,15 @@ Usage:
 - /start: sends a welcome message.
 - /get_password <resource>: retrieves the password for the specified resource.
 """
+import os
 
 import logging
 import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Enable logging
 logging.basicConfig(
@@ -23,7 +27,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 # Токен вашего Telegram-бота
-TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'
+TOKEN = os.getenv('TOKEN')
 
 # URL API вашего Django-приложения
 API_URL = 'http://127.0.0.1:8000/api/passwords/'
@@ -54,10 +58,13 @@ async def get_password(
     if response.status_code == 200:
         passwords = response.json()
         if passwords:
-            password = passwords[0]['password']
-            await update.message.reply_text(
-                f'Password for {resource}: {password}'
-            )
+            for password in passwords:
+                if password['resource'] == resource:
+
+                    password = password['password']
+                    await update.message.reply_text(
+                        f'Password for {resource}: {password}'
+                    )
         else:
             await update.message.reply_text(
                 f'No password found for the resource: {resource}'

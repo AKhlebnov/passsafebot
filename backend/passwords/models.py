@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django_cryptography.fields import encrypt
+from django.urls import reverse
 
-ACTION_CHOICES = [
-    ('create', 'Создание'),
-    ('update', 'Обновление'),
-    ('delete', 'Удаление'),
-]
+from core.constants import (
+    MAX_RESOURCE_LENGTH,
+    MAX_ACTION_LENGTH,
+    ACTION_CHOICES
+)
 
 User = get_user_model()
 
@@ -26,10 +28,10 @@ class AuditLog(models.Model):
     )
     action = models.CharField(
         'Действие',
-        max_length=50,
+        max_length=MAX_ACTION_LENGTH,
         choices=ACTION_CHOICES
     )
-    target = models.CharField('Объект', max_length=255)
+    target = models.CharField('Объект', max_length=MAX_RESOURCE_LENGTH)
     timestamp = models.DateTimeField('Временная метка', auto_now_add=True)
     details = models.TextField('Детали', null=True, blank=True)
 
@@ -46,7 +48,11 @@ class Category(models.Model):
     """
     Модель Category для присвоения категорий ресурсам.
     """
-    name = models.CharField('Название', max_length=100, unique=True)
+    name = models.CharField(
+        'Название',
+        max_length=MAX_RESOURCE_LENGTH,
+        unique=True
+    )
     description = models.TextField('Описание', null=True, blank=True)
 
     class Meta:
@@ -68,15 +74,21 @@ class Password(models.Model):
         on_delete=models.CASCADE,
         related_name='user_passwords'
     )
-    resource = models.CharField('Ресурс', max_length=255)
+    resource = models.CharField('Ресурс', max_length=MAX_RESOURCE_LENGTH)
     resource_icon = models.ImageField(
         upload_to='resource_icons/',
         null=True,
         blank=True,
         verbose_name='Иконка ресурса'
     )
-    login = models.CharField('Логин на ресурсе', max_length=255)
-    password = models.CharField('Пароль', max_length=255)
+    login = models.CharField(
+        'Логин на ресурсе',
+        max_length=MAX_RESOURCE_LENGTH
+    )
+    password = encrypt(models.CharField(
+        'Пароль',
+        max_length=MAX_RESOURCE_LENGTH)
+    )
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     updated_at = models.DateTimeField('Обновлен', auto_now=True)
     category = models.ForeignKey(
@@ -95,3 +107,9 @@ class Password(models.Model):
 
     def __str__(self):
         return self.resource
+
+    def get_absolute_url(self):
+        return reverse(
+            'passwords:password_detail',
+            kwargs={'password_id': self.pk}
+        )
