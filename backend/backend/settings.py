@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from datetime import timedelta
 
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'passwords.apps.PasswordsConfig',
     'core.apps.CoreConfig',
     'rest_framework',
+    'djoser',
     'django_bootstrap5',
 ]
 
@@ -142,3 +144,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'users:login'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', 
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+
+SIMPLE_JWT = {
+    # Устанавливаем срок жизни токена
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
